@@ -7,6 +7,7 @@ import { useAppContext } from "../context/AppContext";
 const navigation = [
 	{ name: "Surveys", href: "/" },
 	{ name: "Create", href: "/create" },
+	{ name: "Recipients", href: "/recipients" },
 ];
 const userNavigation = [
 	{ name: "Your Profile", href: "#", disabled: true },

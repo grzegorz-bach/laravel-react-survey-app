@@ -4,9 +4,10 @@ import AuthLayout from "../layouts/AuthLayout";
 import CreateSurvey from "../views/CreateSurvey";
 import EditSurvey from "../views/EditSurvey";
 import Login from "../views/Login";
+import Signup from "../views/Signup";
 import Survey from "../views/Survey";
 import SurveyList from "../views/SurveyList";
-import { loginAction, logoutAction } from "./actions";
+import { loginAction, logoutAction, signupAction } from "./actions";
 import { appLoader, authLoader } from "./loaders";
 
 const router = createBrowserRouter([
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
 		element: <AuthLayout />,
 		loader: authLoader,
 		children: [
+			{
+				path: "signup",
+				element: <Signup />,
+				action: signupAction,
+			},
 			{
 				path: "login",
 				element: <Login />,
