@@ -1,7 +1,8 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
-import { Fragment } from "react";
+import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router-dom";
+import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useAppContext } from "../context/AppContext";
 
 const navigation = [
 	{ name: "Surveys", href: "/" },
@@ -10,7 +11,6 @@ const navigation = [
 const userNavigation = [
 	{ name: "Your Profile", href: "#", disabled: true },
 	{ name: "Settings", href: "#", disabled: true },
-	{ name: "Sign out", href: "/auth/login" },
 ];
 
 function classNames(...classes: string[]) {
@@ -18,6 +18,14 @@ function classNames(...classes: string[]) {
 }
 
 const AppLayout = () => {
+	const { user } = useLoaderData() as { user: User | null };
+	const { state, dispatch } = useAppContext();
+
+	useEffect(() => {
+		if (!user || state.user) return;
+		dispatch({ type: "SET_USER", payload: user });
+	}, [user, state]);
+
 	return (
 		<div className="min-h-full">
 			<Disclosure as="nav" className="bg-gray-800">
@@ -90,6 +98,21 @@ const AppLayout = () => {
 															)}
 														</Menu.Item>
 													))}
+													<Menu.Item>
+														{({ active }) => (
+															<Form method="post" action="/logout">
+																<button
+																	type="submit"
+																	className={classNames(
+																		active ? "bg-gray-100" : "",
+																		"block px-4 py-2 text-sm text-gray-700"
+																	)}
+																>
+																	Sign Out
+																</button>
+															</Form>
+														)}
+													</Menu.Item>
 												</Menu.Items>
 											</Transition>
 										</Menu>
@@ -142,6 +165,14 @@ const AppLayout = () => {
 											{item.name}
 										</Link>
 									))}
+									<Form method="post" action="/logout">
+										<button
+											type="submit"
+											className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+										>
+											Sign Out
+										</button>
+									</Form>
 								</div>
 							</div>
 						</Disclosure.Panel>

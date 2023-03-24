@@ -1,14 +1,20 @@
-import React from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
 
-type Props = {};
+const AuthLayout = () => {
+	const { state, dispatch } = useAppContext();
 
-const AuthLayout = (props: Props) => {
-    return (
-        <div>
-            <Outlet />
-        </div>
-    );
+	useEffect(() => {
+		if (!state.user) return;
+		dispatch({ type: "CLEAR_USER" });
+	}, [state]);
+
+	return (
+		<div>
+			<Outlet />
+		</div>
+	);
 };
 
 export default AuthLayout;
