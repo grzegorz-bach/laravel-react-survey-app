@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
+use App\Models\EmailVerificationToken;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +22,10 @@ class AuthController extends Controller
 			'email' => $params['email'],
 			'password' => bcrypt($params['password'])
 		]);
+
+		$user->createVerificationToken();
+
+		event(new Registered($user));
 
 		$token = $user->createToken("main")->plainTextToken;
 
